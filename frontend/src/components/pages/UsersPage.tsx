@@ -1,10 +1,11 @@
 import { FlexboxGrid, Table, Pagination } from "rsuite";
 import { useEffect, useState } from "react";
 import { Player } from "../../types/Player";
+import Loader from "../misc/Loader";
 
 const { Column, HeaderCell, Cell } = Table;
 
-export default function UsersPage() {
+export default function UsersPage({ mapId }: any) {
 	const [players, setPlayers] = useState<Player[]>([]);
 	const [limit, setLimit] = useState(10);
 	const [page, setPage] = useState(1);
@@ -21,14 +22,14 @@ export default function UsersPage() {
 	});
 
 	useEffect(() => {
-		fetch(`${process.env.REACT_APP_API_URL}/players`, {
+		fetch(`${process.env.REACT_APP_API_URL}/players/${mapId}`, {
 			credentials: "include",
 		})
 			.then(res => res.json())
-			.then(res => {
-				setPlayers(res);
-			});
+			.then(res => setPlayers(res));
 	}, []);
+
+	if (players.length === 0) return <Loader />;
 
 	return (
 		<>

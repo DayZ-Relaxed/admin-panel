@@ -14,19 +14,18 @@ namespace DayZRelaxed.Controllers
     [ApiController]
     public class Discord : ControllerBase
     {
-        private readonly DayZRelaxedContext _context;
-
-        public Discord(DayZRelaxedContext context)
-        {
-            _context = context;
-        }
-
-
+      
         // GET: api/discord/user
         [HttpGet("user")]
         public async Task<ActionResult<OAuthDiscordUser>> GetDiscordUser()
         {
-            var token = Request.Headers.Cookie.First().Replace("token=", "");
+            var token = "";
+            var cookies = Request.Cookies;
+            foreach (var cookie in cookies)
+            {
+                if (cookie.Key == "token") token = cookie.Value;
+            }    
+ 
             var jwtHelper = new JWTHelper() { Token = token };
             if (!jwtHelper.ValidateJWT()) return Unauthorized();
 

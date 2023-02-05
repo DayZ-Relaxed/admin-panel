@@ -16,7 +16,5 @@
             var distance = Math.Sqrt(Math.Pow(this.PosX - territory.PosX, 2) + Math.Pow(this.PosY - territory.PosY, 2));
             return distance <= radius;
         }
-    }
-
-    
+    }   
 }

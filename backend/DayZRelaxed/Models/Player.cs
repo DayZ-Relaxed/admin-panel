@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace DayZRelaxed.Models
+﻿namespace DayZRelaxed.Models
 {
     public class Player
     {

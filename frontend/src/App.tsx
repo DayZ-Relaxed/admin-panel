@@ -8,12 +8,12 @@ export default function App() {
 
 	if (cookie.token) return <ContainerBlock />;
 	return (
-		<FlexboxGrid justify="center" style={{ marginTop: 15 }}>
-			<FlexboxGrid.Item colspan={4}>
+		<>
+			<FlexboxGrid justify="center" style={{ marginTop: 15, textAlign: "center" }}>
 				<h3>
-					<a href={generateOauthLink()}>Login in with Discord</a>
+					<a href={generateOauthLink()}>Login with Discord</a>
 				</h3>
-			</FlexboxGrid.Item>
-		</FlexboxGrid>
+			</FlexboxGrid>
+		</>
 	);
 }

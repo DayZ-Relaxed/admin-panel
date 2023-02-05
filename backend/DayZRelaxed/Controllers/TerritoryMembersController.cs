@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DayZRelaxed.Data;
 using DayZRelaxed.Models;
@@ -14,22 +9,29 @@ namespace DayZRelaxed.Controllers
     [ApiController]
     public class TerritoryMembersController : ControllerBase
     {
-        private readonly DayZRelaxedContext _context;
+        private readonly DayZRelaxedContext0 contextMap0;
+        private readonly DayZRelaxedContext1 contextMap1;
 
-        public TerritoryMembersController(DayZRelaxedContext context)
+        public TerritoryMembersController(DayZRelaxedContext0 context0, DayZRelaxedContext1 context1)
         {
-            _context = context;
+            contextMap0 = context0;
+            contextMap1 = context1;
         }
 
-        // GET: api/territorymembers
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<TerritoryMember>>> GetTerritoryMember()
+        // GET: api/territorymembers/{mapId}
+        [HttpGet("{mapId}")]
+        public async Task<ActionResult<IEnumerable<TerritoryMember>>> GetTerritoryMember(int mapId)
         {
-          if (_context.TerritoryMember == null) return NotFound();
+          if (contextMap0.TerritoryMember == null || contextMap1.TerritoryMember == null) return NotFound();
 
-            Console.WriteLine(_context.TerritoryMember.First().MemberDayzId);
-
-          return await _context.TerritoryMember.ToListAsync();
+          if(mapId == 0)
+            {
+                return await contextMap0.TerritoryMember.ToListAsync();
+            }
+          else
+            {
+                return await contextMap1.TerritoryMember.ToListAsync();
+            }
         }
 
        

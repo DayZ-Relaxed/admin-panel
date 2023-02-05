@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DayZRelaxed.Data;
 using DayZRelaxed.Models;
@@ -14,27 +9,42 @@ namespace DayZRelaxed.Controllers
     [ApiController]
     public class PlayersController : ControllerBase
     {
-        private readonly DayZRelaxedContext _context;
+        private readonly DayZRelaxedContext0 contextMap0;
+        private readonly DayZRelaxedContext1 contextMap1;
 
-        public PlayersController(DayZRelaxedContext context)
+        public PlayersController(DayZRelaxedContext0 context0, DayZRelaxedContext1 context1)
         {
-            _context = context;
+            contextMap0 = context0;
+            contextMap1 = context1;
         }
 
-        // GET: api/players
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Player>>> GetPlayer()
+        // GET: api/players/{mapId}
+        [HttpGet("{mapId}")]
+        public async Task<ActionResult<IEnumerable<Player>>> GetPlayer(int mapId)
         {
-          if (_context.Player == null) return NotFound();
-          return await _context.Player.ToListAsync(); ;
-
+            if (mapId == 0)
+            {
+                if (contextMap0.Player == null) return NotFound();
+                return await contextMap0.Player.ToListAsync(); ;
+            }
+          
+            if (contextMap1.Player == null) return NotFound();
+            return await contextMap1.Player.ToListAsync();
         }
 
-        // GET: api/players/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Player>> GetPlayerByPlayerId(int id)
+        // GET: api/players/{mapId}/{id}
+        [HttpGet("{mapId}/{id}")]
+        public async Task<ActionResult<Player>> GetPlayerByPlayerId(int mapId, int id)
         {
-            var player = await _context.Player.FindAsync(id);
+            Player player;
+            if (mapId == 0)
+            {
+                player = await contextMap0.Player.FindAsync(id);
+            }
+            else
+            {
+                player = await contextMap1.Player.FindAsync(id);
+            }
 
             if (player == null) return NotFound();
             return player;

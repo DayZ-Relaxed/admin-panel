@@ -1,27 +1,25 @@
-import { FlexboxGrid, Table } from "rsuite";
+import { FlexboxGrid, Table, Button } from "rsuite";
 import { TerritoriesVisitsTableComponent } from "../../types/Territories";
 
 const { Column, HeaderCell, Cell } = Table;
 
-export function TerritoriesVisitsTable({ territoryPassed, showMembers, territoryMembers }: TerritoriesVisitsTableComponent) {
+export function TerritoriesVisitsTable({ territoryPassed, showMembers, territoryMembers, loading }: TerritoriesVisitsTableComponent) {
+	const data = territoryPassed.filter(log => {
+		if (showMembers) return log;
+		if (!territoryMembers.find(player => player.playerName === log.playerName)) return log;
+		return null;
+	});
+
 	return (
 		<>
-			<FlexboxGrid justify="center" style={{ marginTop: 25 }}>
-				<FlexboxGrid.Item colspan={5}>
-					<h4>Territory visits</h4>
+			<FlexboxGrid justify="center">
+				<FlexboxGrid.Item colspan={20}>
+					<h4>Territory visits ({data.length})</h4>
 				</FlexboxGrid.Item>
 			</FlexboxGrid>
 			<FlexboxGrid justify="center" style={{ marginTop: 12 }}>
-				<FlexboxGrid.Item colspan={17}>
-					<Table
-						height={400}
-						width={1000}
-						data={territoryPassed.filter(log => {
-							if (showMembers) return log;
-							if (!territoryMembers.find(player => player.playerName === log.playerName)) return log;
-						})}
-						hover={true}
-					>
+				<FlexboxGrid.Item colspan={20}>
+					<Table height={data.length * 46 + 100} width={1250} data={data} hover={true} loading={loading}>
 						<Column width={150} align="center" fixed>
 							<HeaderCell>Date</HeaderCell>
 							<Cell dataKey="date" />
@@ -32,7 +30,7 @@ export function TerritoriesVisitsTable({ territoryPassed, showMembers, territory
 							<Cell dataKey="time" />
 						</Column>
 
-						<Column width={400}>
+						<Column width={350}>
 							<HeaderCell>Player Name</HeaderCell>
 							<Cell dataKey="playerName" />
 						</Column>
@@ -43,11 +41,17 @@ export function TerritoriesVisitsTable({ territoryPassed, showMembers, territory
 						</Column>
 						<Column width={100}>
 							<HeaderCell>Pos Y</HeaderCell>
-							<Cell dataKey="posY" />
+							<Cell dataKey="posZ" />
 						</Column>
 						<Column width={100}>
 							<HeaderCell>Pos Z</HeaderCell>
-							<Cell dataKey="posZ" />
+							<Cell dataKey="posY" />
+						</Column>
+
+						<Column width={300}>
+							<HeaderCell>...</HeaderCell>
+
+							<Cell style={{ padding: "11px" }}>{row => <code>{`/tpp ${row.posX}, ${row.posZ}, ${row.posY}`}</code>}</Cell>
 						</Column>
 					</Table>
 				</FlexboxGrid.Item>

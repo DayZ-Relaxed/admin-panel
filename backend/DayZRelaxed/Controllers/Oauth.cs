@@ -15,14 +15,7 @@ namespace DayZRelaxed.Controllers
     [ApiController]
     public class Oauth : ControllerBase
     {
-        private readonly DayZRelaxedContext _context;
 
-        public Oauth(DayZRelaxedContext context)
-        {
-            _context = context;
-        }
-
-       
         // GET: api/oauth/:code
         // Discord OAuth
         [HttpGet("{code}")]
@@ -75,7 +68,7 @@ namespace DayZRelaxed.Controllers
                 .IssuedAt(DateTime.Now)
                 .ExpirationTime(DateTime.Now.AddHours(1))
                 .WithAlgorithm(new HMACSHA256Algorithm())
-                .Encode();
+                .Encode();  
 
             CookieOptions cookieOptions = new CookieOptions();
             cookieOptions.Expires = DateTimeOffset.Now.AddDays(1);

@@ -4,28 +4,34 @@ using DayZRelaxed.Data;
 using System.Globalization;
 using DayZRelaxed.middleware;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
+var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
 // Add services to the container.
-builder.Services.AddDbContext<DayZRelaxedContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DayZRelaxed")));
-
+builder.Services.AddDbContext<DayZRelaxedContext0>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DayZRelaxedMap0")));
+builder.Services.AddDbContext<DayZRelaxedContext1>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DayZRelaxedMap1")));
 
 builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 {
-    builder.WithOrigins("http://localhost:3001").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+    builder.WithOrigins(config.GetValue<string>("CorsUrl")).AllowAnyMethod().AllowAnyHeader().AllowCredentials();
 }));
 
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(); 
 
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
+if (config.GetValue<string>("Environment").ToLower() == "production") builder.WebHost.UseIISIntegration();
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -34,7 +40,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
@@ -50,5 +56,7 @@ app.UseWhen(
         return true;
     },
     branch => branch.AuthMiddleware());
+
+
 
 app.Run();

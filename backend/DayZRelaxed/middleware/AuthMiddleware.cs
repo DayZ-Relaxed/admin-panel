@@ -13,6 +13,8 @@ namespace DayZRelaxed.middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
+            var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+
             if (!context.Request.Cookies.ContainsKey("token")) {
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsync("Bad Request");

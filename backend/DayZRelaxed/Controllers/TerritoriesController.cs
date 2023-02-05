@@ -9,26 +9,46 @@ namespace DayZRelaxed.Controllers
     [ApiController]
     public class TerritoriesController : ControllerBase
     {
-        private readonly DayZRelaxedContext _context;
+        private readonly DayZRelaxedContext0 contextMap0;
+        private readonly DayZRelaxedContext1 contextMap1;
 
-        public TerritoriesController(DayZRelaxedContext context)
+        public TerritoriesController(DayZRelaxedContext0 context0, DayZRelaxedContext1 context1)
         {
-            _context = context;
+            contextMap0 = context0;
+            contextMap1 = context1;
         }
 
-        // GET: api/territories
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<TerritoryList>>> GetTerritory()
+        // GET: api/territories/{mapId}
+        [HttpGet("{mapId}")]
+        public async Task<ActionResult<IEnumerable<TerritoryList>>> GetTerritory(int mapId)
         {
-            if (_context.Territory == null) return NotFound();
+            if (contextMap0.Territory == null || contextMap1.Territory == null) return NotFound();
 
-            var territory_list = await _context.Territory.ToListAsync();
+            List<Territory> territory_list;
+            if (mapId == 0)
+            {
+                territory_list = await contextMap0.Territory.ToListAsync();
+            }
+            else
+            {
+                territory_list = await contextMap1.Territory.ToListAsync();
+            }
+           
             var territories = new List<TerritoryList>();
 
             
             foreach (var territory in territory_list)
             {
-                var owner = _context.Player.Where(player => player.PlayerId == territory.OwnerPlayerId).Single();
+                Player owner;
+                if(mapId == 0)
+                {
+                    owner = contextMap0.Player.Where(player => player.PlayerId == territory.OwnerPlayerId).Single();
+                }
+                else
+                {
+                    owner = contextMap1.Player.Where(player => player.PlayerId == territory.OwnerPlayerId).Single();
+                }
+
                 var territory_obj = new TerritoryList()
                 {
                     LastFound = territory.LastFound,

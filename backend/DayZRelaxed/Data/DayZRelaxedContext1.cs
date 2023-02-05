@@ -7,9 +7,9 @@ using DayZRelaxed.Models;
 
 namespace DayZRelaxed.Data
 {
-    public class DayZRelaxedContext : DbContext
+    public class DayZRelaxedContext1 : DbContext
     {
-        public DayZRelaxedContext (DbContextOptions<DayZRelaxedContext> options)
+        public DayZRelaxedContext1 (DbContextOptions<DayZRelaxedContext1> options)
             : base(options)
         {
         }
@@ -17,6 +17,6 @@ namespace DayZRelaxed.Data
         public DbSet<DayZRelaxed.Models.Player> Player { get; set; } = default!;
         public DbSet<DayZRelaxed.Models.Territory>? Territory { get; set; }
         public DbSet<DayZRelaxed.Models.TerritoryMember>? TerritoryMember { get; set; }
-
+        public DbSet<DayZRelaxed.Models.Statistics>? Statistics { get; set; }
     }
 }
