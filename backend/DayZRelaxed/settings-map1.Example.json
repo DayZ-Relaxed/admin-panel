@@ -1,0 +1,21 @@
+{
+	"Logging": {
+		"LogLevel": {
+			"Default": "Information",
+			"Microsoft.AspNetCore": "Warning"
+		}
+	},
+	"AllowedHosts": "*",
+	"ConnectionStrings": {
+		"DayZRelaxedContext": ""
+	},
+	"JWTSecret": "YOUR_SECRET",
+	"LogFilesPath": "",
+	"LogFileName": "DayZServer_x64.ADM",
+	"Discord": {
+		"OAuthClientId": "",
+		"OAuthClientSecret": "",
+		"OauthRedirctUri": "http://localhost:3001/oauth",
+		"AllowedUsers": ["190160914765316096"]
+	}
+}
