@@ -17,7 +17,8 @@ builder.Services.AddDbContext<DayZRelaxedContext1>(options =>
 
 builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 {
-    builder.WithOrigins(config.GetValue<string>("CorsUrl")).AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+    var cors = config.GetValue<string>("CorsUrl");
+    builder.WithOrigins(cors).AllowAnyMethod().AllowAnyHeader().AllowCredentials();
 }));
 
 
