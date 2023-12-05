@@ -65,8 +65,9 @@ namespace DayZRelaxed.Controllers
                      
                         Match carJson = carEventRg.Match(line);
                         if (!carJson.Success) continue;
-                        
-                        var carEvent = Newtonsoft.Json.JsonConvert.DeserializeObject<LogEvent>(carJson.Groups[2].Value);
+
+                        var log = carJson.Groups[2].Value.Replace("\"\"", "\"\\u201c");
+                        var carEvent = Newtonsoft.Json.JsonConvert.DeserializeObject<LogEvent>(log);
                         if (carEvent.EventType != "PLAYER_VEHICLE") continue;
                        
                         var carcover = new CarCover()

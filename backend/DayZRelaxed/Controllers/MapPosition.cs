@@ -71,8 +71,8 @@ namespace DayZRelaxed.Controllers
                         Match playerposJson = playerPosJsonRg.Match(line);
                         if (playerposJson.Success)
                         {
-
-                            var playerEvent = Newtonsoft.Json.JsonConvert.DeserializeObject<LogEvent>(playerposJson.Groups[2].Value);
+                            var log = playerposJson.Groups[2].Value.Replace("\"\"", "\"\\u201c");
+                            var playerEvent = Newtonsoft.Json.JsonConvert.DeserializeObject<LogEvent>(log);
                             if (playerEvent.EventType == null) continue;
 
                             var mapPos = new MapPosition(radius)
